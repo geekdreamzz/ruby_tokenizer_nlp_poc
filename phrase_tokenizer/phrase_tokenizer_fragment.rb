@@ -95,8 +95,8 @@ module Phrase
       end
 
       def write_to_cache
-        return if definition_hash.keys.length == 0
-        ::Phrase::Tokenizer::FRAGMENT_CACHE.set(normalized_phrase, definition_hash.to_json)
+        return if definitions_hash.keys.length == 0
+        ::Phrase::Tokenizer::FRAGMENT_CACHE.set(normalized_phrase, definitions_hash.to_json)
       end
     end
   end

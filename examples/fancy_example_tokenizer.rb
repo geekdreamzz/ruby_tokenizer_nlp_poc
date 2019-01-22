@@ -6,6 +6,6 @@ require 'pry'
 require_relative '../phrase_tokenizer/phrase_tokenizer'
 
 class FancyExampleTokenizer < ::Phrase::Tokenizer; end #base inheritance
-tokenizer = FancyExampleTokenizer.new("add 10 reps of 225 to bench press")
+tokenizer = FancyExampleTokenizer.new("record 55 pushups")
 
 binding.pry
