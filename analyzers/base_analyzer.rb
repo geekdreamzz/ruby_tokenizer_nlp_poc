@@ -1,4 +1,4 @@
-require_relative '../phrase_tokenizer_analyzer'
+require_relative '../phrase_tokenizer/phrase_tokenizer_analyzer'
 
 module BaseAnalyzer
   include Phrase::Tokenizer::Analyzer

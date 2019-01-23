@@ -1,0 +1,4 @@
+{ "track_exercise": {
+       "required_entities": ["exercise", "verb", "integer"]
+  }
+}

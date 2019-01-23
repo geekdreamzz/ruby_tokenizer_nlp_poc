@@ -1,0 +1,9 @@
+{
+  "exercise": {
+    "required_parts_of_speech": ["noun"],
+    "known_entities": [
+      "pushup", "pushups", "push up", "push ups", "situp", "sit ups", "pullup", "pullups", "pull up", "squat", "bench press",
+      "deadlift", "squats"
+    ]
+  }
+}
