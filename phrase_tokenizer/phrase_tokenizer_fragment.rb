@@ -4,6 +4,8 @@ require 'open-uri'
 module Phrase
   class Tokenizer
     class Fragment
+      DEFAULT_VALIDATORS = %w{noun pronoun verb adjective adverb preposition conjunction interjection integer}.freeze
+
       def initialize(phrase, index, **opts)
         @phrase = phrase
         @index = index
@@ -35,8 +37,12 @@ module Phrase
         @definitions_hash ||= {}
       end
 
-      def can_be?(part_of_speech)
-        parts_of_speech.map{|p| p.match(/#{part_of_speech}/i) }.any?
+      def can_be?(val)
+        if val.match(/integer|number/i)
+          is_number?
+        else
+          parts_of_speech.map{|p| p.match(/#{val}/i) }.any?
+        end
       end
 
       def is_number?
@@ -77,6 +83,32 @@ module Phrase
           definitions_hash[pos] << definition.text
         end
         write_to_cache
+      end
+
+      def entity_types
+        @entity_types ||= ::Phrase::Tokenizer.entity_types
+      end
+
+      def entities
+        @entities ||= entity_types.map do |entity_type|
+          if entity_type.entities_for_validation.include?(normalized_phrase)
+            entity = Struct.new(:type, :phrase)
+            entity.new(entity_type.type, normalized_phrase)
+          end
+        end.compact
+      end
+
+      def detected_parts_of_speech
+        @detected_parts_of_speech ||= DEFAULT_VALIDATORS.map do |pos|
+          if can_be? pos
+            entity = Struct.new(:type, :phrase)
+            entity.new(pos, normalized_phrase)
+          end
+        end.compact
+      end
+
+      def entities_and_parts_of_speech
+        entities | detected_parts_of_speech
       end
 
       private

@@ -5,7 +5,14 @@ require 'pry'
 
 require_relative '../phrase_tokenizer/phrase_tokenizer'
 
-class FancyExampleTokenizer < ::Phrase::Tokenizer; end #base inheritance
-tokenizer = FancyExampleTokenizer.new("record 55 pushups")
+class FancyExampleTokenizer < ::Phrase::Tokenizer
+  entity_types :exercise
+  intent_types :track_exercise
 
+  def final_callbacks
+    binding.pry
+  end
+end
+
+tokenizer = FancyExampleTokenizer.new("record 55 pushups")
 binding.pry

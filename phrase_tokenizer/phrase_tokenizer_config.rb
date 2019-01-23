@@ -3,8 +3,8 @@ module Phrase
     class Config
       class << self
         def phrase_token_analyzers
-          Dir[File.join(__dir__, 'analyzers', '*.rb')].map do |filename|
-            require filename
+          Dir[File.join(Dir.pwd, 'analyzers', '*.rb')].map do |filename|
+            require "#{filename}"
             class_name = filename.split('/').last.split('.').first.split('_').map(&:capitalize).join
             validate_analyzer Object.const_get(class_name)
           end

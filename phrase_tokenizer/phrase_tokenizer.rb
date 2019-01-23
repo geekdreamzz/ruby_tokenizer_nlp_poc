@@ -5,9 +5,12 @@ require 'redis-namespace'
 require_relative 'phrase_tokenizer_config'
 require_relative 'phrase_tokenizer_token'
 require_relative 'phrase_tokenizer_fragment'
+require_relative 'phrase_tokenizer_dictionary'
 
 module Phrase
   class Tokenizer
+    include Dictionary
+
     REDIS_CONNECTION = Redis.new
     FRAGMENT_CACHE = Redis::Namespace.new(:fragments, :redis => REDIS_CONNECTION)
 
@@ -16,6 +19,7 @@ module Phrase
       @phrase.freeze
       tokens unless opts[:init_without_tokens]
       analyze_tokens!
+      final_callbacks
     end
 
     def phrase
@@ -57,6 +61,18 @@ module Phrase
 
     def token_phrases
       @token_phrases ||= tokens.map(&:phrase)
+    end
+
+    def top_scored_intent
+      sorted_intent_scores.first
+    end
+
+    def sorted_intent_scores
+      @sorted_intent_scores ||= tokens.map(&:scored_intents).flatten.sort_by{|intent| intent[:score] }.reverse
+    end
+
+    def final_callbacks
+      puts "token analysis complete! override this method to do some post processing =)"
     end
   end
 end
